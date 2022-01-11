@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group 'org.spring.school'
+version '5.3.15-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    implementation(project(":spring-context"))
+}
