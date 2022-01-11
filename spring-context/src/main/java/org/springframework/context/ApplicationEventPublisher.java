@@ -34,6 +34,8 @@ package org.springframework.context;
 public interface ApplicationEventPublisher {
 
 	/**
+	 * 发布所有事件
+	 *
 	 * Notify all <strong>matching</strong> listeners registered with this
 	 * application of an application event. Events may be framework events
 	 * (such as ContextRefreshedEvent) or application-specific events.
