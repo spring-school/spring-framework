@@ -1009,6 +1009,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
+	 * 释放所有资源
+	 * 当一个资源类实现了 AutoCloseable 接口 close方法，在使用try-catch-resources语法创建的资源抛出异常后
+	 * JVM会自动调用close 方法进行资源释放，当没有抛出异常正常退出try-block时候也会调用close方法。
+	 * 像数据库链接类Connection,io类InputStream或OutputStream都直接或者间接实现了该接口。
+	 *
 	 * Close this application context, destroying all beans in its bean factory.
 	 * <p>Delegates to {@code doClose()} for the actual closing procedure.
 	 * Also removes a JVM shutdown hook, if registered, as it's not needed anymore.

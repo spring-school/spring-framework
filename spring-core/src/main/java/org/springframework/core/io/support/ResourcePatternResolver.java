@@ -22,6 +22,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 /**
+ * 资源模式解析器，解析匹配的多个资源
+ *
  * Strategy interface for resolving a location pattern (for example,
  * an Ant-style path pattern) into {@link Resource} objects.
  *
@@ -65,6 +67,8 @@ public interface ResourcePatternResolver extends ResourceLoader {
 	String CLASSPATH_ALL_URL_PREFIX = "classpath*:";
 
 	/**
+	 * 返回匹配资源模式的所有资源
+	 *
 	 * Resolve the given location pattern into {@code Resource} objects.
 	 * <p>Overlapping resource entries that point to the same physical
 	 * resource should be avoided, as far as possible. The result should
