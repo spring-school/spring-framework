@@ -151,14 +151,18 @@ public class DefaultResourceLoader implements ResourceLoader {
 			}
 		}
 
+		// `/` 开头，加载指定路径参数
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
 		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {
+			// `classpath:` 资源加载
 			return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());
 		}
 		else {
 			try {
+				// 文件路径加载资源
+				// "file://xx" | "vfsfile://xx"
 				// Try to parse the location as a URL...
 				URL url = new URL(location);
 				return (ResourceUtils.isFileURL(url) ? new FileUrlResource(url) : new UrlResource(url));
