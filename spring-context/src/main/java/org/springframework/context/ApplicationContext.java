@@ -24,6 +24,8 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.lang.Nullable;
 
 /**
+ * 应用上下文
+ *
  * Central interface to provide configuration for an application.
  * This is read-only while the application is running, but may be
  * reloaded if the implementation supports this.
@@ -59,6 +61,8 @@ public interface ApplicationContext extends EnvironmentCapable, ListableBeanFact
 		MessageSource, ApplicationEventPublisher, ResourcePatternResolver {
 
 	/**
+	 * 应用ID
+	 *
 	 * Return the unique id of this application context.
 	 * @return the unique id of the context, or {@code null} if none
 	 */
@@ -66,24 +70,32 @@ public interface ApplicationContext extends EnvironmentCapable, ListableBeanFact
 	String getId();
 
 	/**
+	 * 应用名称
+	 *
 	 * Return a name for the deployed application that this context belongs to.
 	 * @return a name for the deployed application, or the empty String by default
 	 */
 	String getApplicationName();
 
 	/**
+	 * 应用别名
+	 *
 	 * Return a friendly name for this context.
 	 * @return a display name for this context (never {@code null})
 	 */
 	String getDisplayName();
 
 	/**
+	 * 应用启动时间
+	 *
 	 * Return the timestamp when this context was first loaded.
 	 * @return the timestamp (ms) when this context was first loaded
 	 */
 	long getStartupDate();
 
 	/**
+	 * 父应用
+	 *
 	 * Return the parent context, or {@code null} if there is no parent
 	 * and this is the root of the context hierarchy.
 	 * @return the parent context, or {@code null} if there is no parent
