@@ -32,6 +32,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.StringValueResolver;
 
 /**
+ * 容器工厂配置信息
+ *
  * Configuration interface to be implemented by most bean factories. Provides
  * facilities to configure a bean factory, in addition to the bean factory
  * client methods in the {@link org.springframework.beans.factory.BeanFactory}
@@ -67,6 +69,8 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 
 
 	/**
+	 * 父类容器工厂
+	 *
 	 * Set the parent of this bean factory.
 	 * <p>Note that the parent cannot be changed: It should only be set outside
 	 * a constructor if it isn't available at the time of factory instantiation.
@@ -78,6 +82,8 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	void setParentBeanFactory(BeanFactory parentBeanFactory) throws IllegalStateException;
 
 	/**
+	 * 工厂类加载器
+	 *
 	 * Set the class loader to use for loading bean classes.
 	 * Default is the thread context class loader.
 	 * <p>Note that this class loader will only apply to bean definitions
@@ -90,6 +96,8 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	void setBeanClassLoader(@Nullable ClassLoader beanClassLoader);
 
 	/**
+	 * 工厂当前类加载器
+	 *
 	 * Return this factory's class loader for loading bean classes
 	 * (only {@code null} if even the system ClassLoader isn't accessible).
 	 * @see org.springframework.util.ClassUtils#forName(String, ClassLoader)
@@ -286,6 +294,8 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	void setApplicationStartup(ApplicationStartup applicationStartup);
 
 	/**
+	 * 应用启动信息
+	 *
 	 * Return the {@code ApplicationStartup} for this bean factory.
 	 * @since 5.3
 	 */
