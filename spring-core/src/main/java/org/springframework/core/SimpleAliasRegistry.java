@@ -31,6 +31,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.util.StringValueResolver;
 
 /**
+ * 别名注册树实现
+ *
  * Simple implementation of the {@link AliasRegistry} interface.
  * <p>Serves as base class for
  * {@link org.springframework.beans.factory.support.BeanDefinitionRegistry}
@@ -45,7 +47,11 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	/** Logger available to subclasses. */
 	protected final Log logger = LogFactory.getLog(getClass());
 
-	/** Map from alias to canonical name. */
+	/**
+	 * 线程安全保存所有别名信息
+	 *
+	 *  Map from alias to canonical name.
+	 */
 	private final Map<String, String> aliasMap = new ConcurrentHashMap<>(16);
 
 
@@ -54,6 +60,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 		Assert.hasText(name, "'name' must not be empty");
 		Assert.hasText(alias, "'alias' must not be empty");
 		synchronized (this.aliasMap) {
+			// 别名和名称相同时，从别名集合里面移除
 			if (alias.equals(name)) {
 				this.aliasMap.remove(alias);
 				if (logger.isDebugEnabled()) {
@@ -62,11 +69,16 @@ public class SimpleAliasRegistry implements AliasRegistry {
 			}
 			else {
 				String registeredName = this.aliasMap.get(alias);
+
+				// 别名存在时
 				if (registeredName != null) {
+					// 别名和名称存在时，忽略注册别名操作
 					if (registeredName.equals(name)) {
 						// An existing alias - no need to re-register
 						return;
 					}
+
+					// 判断别名是否允许覆盖，如果不允许覆盖，直接抛错，提示已经存在
 					if (!allowAliasOverriding()) {
 						throw new IllegalStateException("Cannot define alias '" + alias + "' for name '" +
 								name + "': It is already registered for name '" + registeredName + "'.");
@@ -76,7 +88,11 @@ public class SimpleAliasRegistry implements AliasRegistry {
 								registeredName + "' with new target name '" + name + "'");
 					}
 				}
+
+				// 检查别名与名称是否存在循环指向的情况
 				checkForAliasCircle(name, alias);
+
+				// 注册别名，建立名称与别名关系
 				this.aliasMap.put(alias, name);
 				if (logger.isTraceEnabled()) {
 					logger.trace("Alias definition '" + alias + "' registered for name '" + name + "'");
