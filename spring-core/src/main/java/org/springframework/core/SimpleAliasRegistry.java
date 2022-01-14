@@ -160,6 +160,8 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	}
 
 	/**
+	 * 解析别名，别名里面包含占位符
+	 *
 	 * Resolve all alias target names and aliases registered in this
 	 * registry, applying the given {@link StringValueResolver} to them.
 	 * <p>The value resolver may for example resolve placeholders
@@ -169,30 +171,45 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	public void resolveAliases(StringValueResolver valueResolver) {
 		Assert.notNull(valueResolver, "StringValueResolver must not be null");
 		synchronized (this.aliasMap) {
+			// 别名集合拷贝
 			Map<String, String> aliasCopy = new HashMap<>(this.aliasMap);
 			aliasCopy.forEach((alias, registeredName) -> {
+				// 解析别名
 				String resolvedAlias = valueResolver.resolveStringValue(alias);
+				// 解析注册名称
 				String resolvedName = valueResolver.resolveStringValue(registeredName);
+
+				// 为空或者别名和注册名称相同就移除掉
 				if (resolvedAlias == null || resolvedName == null || resolvedAlias.equals(resolvedName)) {
 					this.aliasMap.remove(alias);
 				}
+				// 解析后的别名与别名不一样
 				else if (!resolvedAlias.equals(alias)) {
+					// 解析后的别名，原始别名集合存在
 					String existingName = this.aliasMap.get(resolvedAlias);
 					if (existingName != null) {
+						// 如果一样，获取到的就是解析后的注册名，就把别名对应的移除
 						if (existingName.equals(resolvedName)) {
 							// Pointing to existing alias - just remove placeholder
 							this.aliasMap.remove(alias);
 							return;
 						}
+
+						// 如果不一样，说明解析后的注册名被占用了，就抛异常
 						throw new IllegalStateException(
 								"Cannot register resolved alias '" + resolvedAlias + "' (original: '" + alias +
 								"') for name '" + resolvedName + "': It is already registered for name '" +
 								registeredName + "'.");
 					}
+
+					// 检查别名与名称是否存在循环指向的情况
 					checkForAliasCircle(resolvedName, resolvedAlias);
+
+					// 移除别名且重写写入别名
 					this.aliasMap.remove(alias);
 					this.aliasMap.put(resolvedAlias, resolvedName);
 				}
+				// 注册的名称与解析的名称不一样，重写注册别名
 				else if (!registeredName.equals(resolvedName)) {
 					this.aliasMap.put(alias, resolvedName);
 				}
